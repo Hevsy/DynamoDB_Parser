@@ -1,0 +1,29 @@
+{
+  "siteId": { "S": "xn--golvlggare-u5a.net" },
+  "site": {
+    "M": {
+      "Skane-lan": {
+        "M": {
+          "site": {
+            "M": {
+              "Malmo": {
+                "M": {
+                  "site": {
+                    "M": {
+                      "Skanes-Parkettslip": {
+                        "M": {
+                          "comment": { "S": "Imported 20210501 13:05 CET" },
+                          "categories": { "L": [{ "S": "H6dsAI7l" }] }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

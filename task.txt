@@ -1,0 +1,65 @@
+A python script to process a text file into a dynamodb table on a AWS linux machine.
+
+When we dump the data rows it looks like this.
+{'comment': {'S': 'imported 20230630 21:15 CET'}, 'siteId': {'S': 'akua9394.com'}, 'categories': {'L': [{'S': 'Wu133hyG'}]}}
+
+or for a site with a listed path 
+{'siteId': {'S': 'xn--golvlggare-u5a.net'}, 'site': {'M': {'Skane-lan': {'M': {'site': {'M': {'Malmo': {'M': {'site': {'M': {'Skanes-Parkettslip': {'M': {'comment': {'S': 'Imported 20210501 13:05 CET'}, 'categories': {'L': [{'S': 'H6dsAI7l'}]}}}}}}}}}}}}}}
+
+The text file we have are formatted like this
+https://akua9394.com Wu133hyG
+https://www.xn--golvlggare-u5a.net/Skane-lan/Malmo/Skanes-Parkettslip H6dsAI7l
+
+in some cases from some of our sources is the list alreaddy stripped those files will look like this
+akua9394.com Wu133hyG
+xn--golvlggare-u5a.net/Skane-lan/Malmo/Skanes-Parkettslip H6dsAI7l
+
+we also have ip numbers ipv4 we are working with ipv6 support but that will take a while.
+
+111.222.123.12 Wu133hyG
+112.223.136.23/bloody/path H6dsAI7l
+
+and with http* crap in front
+https://111.222.123.12 Wu133hyG
+http://112.223.136.23/bloody/path H6dsAI7l
+
+
+and so on each file can contain a large number of urls with a space as delimiter we are talking about over 100k rows per file.
+the python script shall parse the file, strip eventual http:// or https:// and www (if it is there) and trailing / add the comment field in the format 'Imported {DATE in YYYYMMDD TIME in HH:MM 24h and timezone}' set the categories according to the designated field.
+the python script shall check that each row is complete and if the row is unkomplete or malformed shall it be skipped and not imported and a note sent to import-error.date.time.timezone.log (created on first event)with the row and error message
+the python script shall save each complete row that have been sent to the table in the format chosen (is up to programer to choose JSON or other) when write is complete to the logfile import-complete.date.time.timezone.log (created on first event)
+the python script shall have a configurable timeout for put_item (or by programer chosen metode) declared in ms, default value shall be 3000 ms. If timeout reaches 3000 ms the row is skipped and sent to import-error.date.time.timezone.log (created on first event)with the row and error message
+the python script shall have a configurable wait inbetween each row with time declared in ms, default value shall be 100 ms.
+
+aws dynamodb describe-table --table-name listed-sites
+{
+    "Table": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "siteId",
+                "AttributeType": "S"
+            }
+        ],
+        "TableName": "listed-sites",
+        "KeySchema": [
+            {
+                "AttributeName": "siteId",
+                "KeyType": "HASH"
+            }
+        ],
+        "TableStatus": "ACTIVE",
+        "CreationDateTime": "2020-11-25T09:00:40.323000+00:00",
+        "ProvisionedThroughput": {
+            "LastIncreaseDateTime": "2021-05-14T13:46:32.404000+00:00",
+            "LastDecreaseDateTime": "2021-05-05T16:56:51.280000+00:00",
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 25,
+            "WriteCapacityUnits": 80
+        },
+        "TableSizeBytes": about 1 GB,
+        "ItemCount": above 10 million,
+        "TableArn": "arn:aws:dynamodb:eu-REDACTED:41REDACTED:table/listed-sites",
+        "TableId": "82REDACTED"
+    }
+}
+
