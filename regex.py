@@ -1,9 +1,9 @@
 import re
 import string
 
-pat = r"^(http(s)?:\/\/)?(www.)?"
 
 def url_strip (s):
+    pat = r"^(http(s)?:\/\/)?(www.)?"
     return re.sub(pat, "", s)
 
 def slash_strip(s):
