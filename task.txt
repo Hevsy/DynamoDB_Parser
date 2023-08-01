@@ -1,4 +1,4 @@
-A python script to process a text file into a dynamodb table on a AWS linux machine.
+A python script to process a text file into a dynamodb table on an AWS linux machine.
 
 When we dump the data rows it looks like this.
 {'comment': {'S': 'imported 20230630 21:15 CET'}, 'siteId': {'S': 'akua9394.com'}, 'categories': {'L': [{'S': 'Wu133hyG'}]}}
