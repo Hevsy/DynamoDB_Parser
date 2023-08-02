@@ -1,6 +1,6 @@
 from unicodedata import category
 from urllib.parse import urlparse
-from posixpath import basename, dirname
+from posixpath import basename, dirname, normpath
 
 with open("list1.txt", "r") as file:
     for line in file:
@@ -13,11 +13,14 @@ with open("list1.txt", "r") as file:
         site_id = parse_object.netloc
         path = dirname(parse_object.path)
 
-        print(site_id, path, site_category, sep="\n", end="\n__________________\n")
+        #print(site_id, path, site_category, sep="\n", end="\n__________________\n")
 
-# print(parse_object.netloc)
-
-# print(parse_object.path)
-
-# print (basename(parse_object.path))
-# print (dirname(parse_object.path))
+        print(parse_object.netloc)
+        print(parse_object.path)
+        print (basename(parse_object.path))
+        print (dirname(parse_object.path))
+        print (normpath(parse_object.path))
+        print ('__________________')
+        
+        
+        
