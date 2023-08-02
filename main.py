@@ -1,5 +1,3 @@
-import re
-
 from func import log_error, slash_strip, url_strip, valid_entry
 
 
