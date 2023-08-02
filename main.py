@@ -1,26 +1,25 @@
-from urllib.parse import urlparse
-from func import log_error, slash_strip, url_strip, valid_entry
+from func import log_error, split_url, url_strip, slash_strip, parse_entry
+
+def main():
+    with open("list1.txt", "r") as file:
+        for line in file:
+            line = line.strip()  # Remove leading/trailing whitespace
+            if not line:
+                continue  # Skip empty lines
+            
+            url, site_category = parse_entry(line)
+            
+            if not url or not site_category:
+                log_error("Invalid line")
+                print("Error - skipping")
+                continue
+            
+            site_id, path = split_url(url)
+            
+            print(site_id, path, site_category, sep="\n")
+            print("__________________")
 
 
-with open("list1.txt", "r") as file:
-    for line in file:
-        try:
-            line = line.split()
-            url = line[0]
-            site_category = line[1]
-        except:
-            log_error("Invalid line")
-            print ("Error - skipping")
-            continue
 
-        if len(line) != 2 or not valid_entry(url):
-            log_error("Invalid line")
-            print ("Error - skipping")
-            continue
-
-        if valid_entry(url):
-            parse_object = urlparse(url)
-            site_id = url_strip(parse_object.netloc)
-            path = slash_strip(parse_object.path)
-        print(site_id, path, site_category, sep="\n")
-        print("__________________")
+if __name__ == "__main__":
+    main()

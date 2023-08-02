@@ -1,23 +1,23 @@
 import re
 
+def log_error(message):
+    with open("error.log", "a") as log_file:
+        log_file.write(message + "\n")
 
-def log_error(e):
-    # TODO: logging errors
-    pass
+def parse_entry(entry):
+    parts = entry.split()
+    if len(parts) != 2:
+        return None, None
+    return parts
 
-
-def valid_entry(s):
-    # TODO: entry validation
-    pattern = r""
-    return True
-
-
-def url_strip(s) -> str:
-    """Strips a string (presumably, URL) of http(s)://(www.)"""
-    pat = r"^(http(s)?:\/\/)?(www.)?"
+def url_strip(s):
+    pat = r"^(http(s)?:\/\/)?(www\.)?"
     return re.sub(pat, "", s)
 
-
-def slash_strip(s) -> str:
-    """Strips trailing slash"""
+def slash_strip(s):
     return s.rstrip("/")
+
+def split_url(url):
+    url = url_strip(slash_strip(url))
+    site_id, *path = url.split('/')
+    return site_id,path
