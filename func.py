@@ -36,7 +36,8 @@ def parse_line(line, delimiter=" "):
 
 
 def invalid_output(site_category, site_id) -> bool:
-    """Checks if both required parts exist: site_id and site_category"""
+    """Checks if both required parts exist: site_id and site_category.
+    If either one is missing, the output deemed invalid and function return 'True'"""
     return not site_id or not site_category
 
 

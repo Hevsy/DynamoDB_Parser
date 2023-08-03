@@ -1,11 +1,6 @@
 import logging
 from func import parse_line, invalid_output, time_now, timestamp
 
-# from datetime import datetime
-# 
-# print(datetime.now(tz=get_localzone()).strftime('%Z'))
-# # CEST
-
 
 def main():
     logging.basicConfig(
