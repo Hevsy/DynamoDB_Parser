@@ -1,13 +1,10 @@
 import logging
 from func import parse_line, invalid_output, time_now, timestamp
+from logging_config import setup_logging
 
 
 def main():
-    logging.basicConfig(
-        filename=f"import-error.{time_now('%Y%m%d')}.{time_now('%H%M%S')}.{time_now('%Z')}.log",
-        filemode="a",
-        format="%(message)s",
-    )
+    setup_logging()
 
     with open("list1.txt", "r") as file:
         for line in file:
@@ -18,9 +15,11 @@ def main():
             site_category, site_id, path = parse_line(line)
 
             if invalid_output(site_category, site_id):
-                logging.error(f"{timestamp()} Invalid line: {line}")
+                logging.error(f"Error in line: {line}")
                 print("Error - skipping")  # for debugging
                 continue
+            else:
+                logging.info(f"Succesfully parsed line: {line}")
 
             print(site_id, path, site_category, sep="\n")  # for debugging
             print("__________________")
