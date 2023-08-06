@@ -26,7 +26,7 @@ def parse_line(line, delimiter=" "):
 
     # Two parts required for parsing: url and site_category.
     # If there are more or less parts in the line - it is considered malfored
-    # and function returns 'None' for all outputs, so if can later be flagged as invalid
+    # and function returns 'None' for all outputs, so it can later be flagged as invalid
     if len(parts) != 2:
         return None, None, None
     url = parts[0]
