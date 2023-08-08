@@ -2,6 +2,9 @@ import logging
 
 from func import time_now, timestamp
 
+class InfoFilter(logging.Filter):
+    def filter(self, record):
+        return record.levelno <= logging.INFO
 
 def setup_logging():
     """
@@ -36,5 +39,6 @@ def setup_logging():
     )
     success_handler.setLevel(logging.INFO)  # Set success handler's level to INFO
     success_handler.setFormatter(formatter)
+    success_handler.addFilter(logging.Filter(logging.INFO))  # Filter out levels higher than INFO
     logger.addHandler(success_handler)
 
