@@ -2,9 +2,16 @@ import logging
 
 from func import time_now, timestamp
 
+
 class InfoFilter(logging.Filter):
+    """
+    Creates a filter that evaluates to True only when the log level is INFO
+    E.g. it will filter only the log engtry with level INFO
+    """
+
     def filter(self, record):
-        return record.levelno <= logging.INFO
+        return record.levelno == logging.INFO
+
 
 def setup_logging():
     """
@@ -19,9 +26,13 @@ def setup_logging():
 
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)  # Set logger's level to DEBUG
+    # logger.propagate = False
 
     # Create a formatter
     formatter = logging.Formatter(f"{timestamp()} | %(message)s")
+
+    # Create a filte for success_handler. Only logs of level INFO will be passed.
+    success_filter = InfoFilter()
 
     # Create a file handler for error logs
     error_handler = logging.FileHandler(
@@ -39,6 +50,5 @@ def setup_logging():
     )
     success_handler.setLevel(logging.INFO)  # Set success handler's level to INFO
     success_handler.setFormatter(formatter)
-    success_handler.addFilter(logging.Filter(logging.INFO))  # Filter out levels higher than INFO
+    success_handler.addFilter(success_filter)  # Filter out levels other than INFO
     logger.addHandler(success_handler)
-
