@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 requests = "*"
 tzlocal = "*"
+boto3 = "*"
 
 [dev-packages]
 
