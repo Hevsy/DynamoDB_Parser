@@ -1,5 +1,5 @@
 import logging
-from func import parse_line, invalid_output, time_now, timestamp
+from func import parse_line, invalid_output
 from logging_config import setup_logging
 
 
