@@ -1,12 +1,16 @@
 from urllib import response
 import boto3
+from botocore.exceptions import ClientError
 
 client = boto3.client("dynamodb")
 
 response = client.list_tables()
 print(response)
 try:
-    response = client.put_item(TableName = "DynamoDB_parser-dev", Item = {'siteId': { 'S' = 'google.co'}, 'site': 'SS'={['google', 'com']}, 'categories': {'S' = 'H6dsAI7l'}})
-    print (response)
+    # client.put_item(Item={"id": "34", "company": "microsoft"})
+    response2 = client.put_item(
+        TableName="DynamoDB_parser-dev", Item={"siteId": {"S": "google.co"}}
+    )
+    print(response2)
 except ClientError as err:
-    print (err)
+    print(err)
