@@ -6,7 +6,7 @@ from logging_config import setup_logging
 def main():
     setup_logging()
 
-    dynamodb = boto3.client('dynamodb')
+    dynamodb = boto3.client("dynamodb")
 
     with open("list1.txt", "r") as file:
         for line in file:
