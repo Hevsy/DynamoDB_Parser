@@ -2,6 +2,7 @@ from datetime import datetime
 from tzlocal import get_localzone
 import re
 
+
 def url_strip(s):
     """
     Returns a string with the URL protocol ('http' or 'https') and 'www' prefix stripped.
@@ -15,6 +16,7 @@ def url_strip(s):
     pat = r"^(http(s)?:\/\/)?(www\.)?"
     return re.sub(pat, "", s)
 
+
 def slash_strip(s) -> str:
     """
     Returns a string with the trailing '/' characters stripped.
@@ -26,6 +28,7 @@ def slash_strip(s) -> str:
         str: The input string with trailing '/' characters removed.
     """
     return s.rstrip("/")
+
 
 def split_url(url):
     """
@@ -40,6 +43,7 @@ def split_url(url):
     url = url_strip(slash_strip(url))
     site_id, *path = url.split("/")
     return site_id, path
+
 
 def parse_line(line, delimiter=" "):
     """
@@ -64,6 +68,7 @@ def parse_line(line, delimiter=" "):
     site_id, path = split_url(url)
     return site_category, site_id, path
 
+
 def invalid_output(site_category, site_id) -> bool:
     """
     Checks if both required parts exist: site ID and site category.
@@ -77,6 +82,7 @@ def invalid_output(site_category, site_id) -> bool:
     """
     return not site_id or not site_category
 
+
 def time_now(fmt) -> str:
     """
     Returns the current time in a specified format.
@@ -89,6 +95,7 @@ def time_now(fmt) -> str:
     """
     return datetime.now(tz=get_localzone()).strftime(fmt)
 
+
 def timestamp() -> str:
     """
     Returns the current time in 'YYYYMMDD HH:MM TMZ' format.
@@ -99,21 +106,33 @@ def timestamp() -> str:
     fmt = "%Y%m%d %H:%M %Z"
     return time_now(fmt)
 
-def list_to_nested_dict(key, lst):
+
+def create_nested_structure(key, site_id, path, categories, comment):
     """
-    Convert a list into a nested dictionary with the specified key.
+    Create a nested dictionary structure representing a record in DynamoDB.
 
-    This function takes a list and recursively constructs a nested dictionary using the given key. Each element in the list
-    becomes a key in the nested dictionary, and the corresponding value is either the next element in the list (if available)
-    or the last item in the list.
+    This function generates a nested dictionary structure that represents a record to be stored in DynamoDB.
+    The provided data, such as site_id, path, categories, and comment, are organized according to the specified key.
 
-    Parameters:
-        key (str): The key to use for constructing the nested dictionary.
-        lst (list): The list of elements to convert into a nested dictionary.
+    Args:
+        key (str): The key to be used for nesting the dictionary.
+        site_id (str): The site identifier.
+        path (list): The list of path components.
+        categories (dict or list): The categories associated with the record.
+        comment (str): The comment associated with the record.
 
     Returns:
-        dict: A nested dictionary constructed from the list using the specified key.
+        dict: A nested dictionary representing the DynamoDB record.
     """
-    if len(lst) == 1:
-        return {key: lst[0]}
-    return {key: {lst[0]: list_to_nested_dict(key, lst[1:])}}
+    nested_structure = {"siteId": site_id}
+
+    current_level = nested_structure
+
+    for folder in path:
+        current_level[key] = {folder: {}}
+        current_level = current_level[key][folder]
+
+    current_level["comment"] = comment
+    current_level["categories"] = categories
+
+    return nested_structure

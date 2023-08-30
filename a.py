@@ -1,11 +1,11 @@
-def create_nested_structure(site_id, path, categories, comment):
+def create_nested_structure(key, site_id, path, categories, comment):
     nested_structure = {"siteId": site_id}
 
     current_level = nested_structure
 
     for folder in path:
-        current_level["site"] = {folder: {}}
-        current_level = current_level["site"][folder]
+        current_level[key] = {folder: {}}
+        current_level = current_level[key][folder]
 
     current_level["comment"] = comment
     current_level["categories"] = categories
@@ -14,15 +14,17 @@ def create_nested_structure(site_id, path, categories, comment):
 
 
 # Example usage
-site_id = "xn--golvlggare-u5a.net"
-path = ["Skane-lan", "Malmo", "Skanes-Parkettslip"]
-categories = ["H6dsAI7l"]
-comment = "Imported 20210501 13:05 CET"
 
-# site_id = 'akua9394.com'
-# path = []  # Empty path
-# categories = ['Wu133hyG']
-# comment = 'imported 20230630 21:15 CET'
+# site_id = "xn--golvlggare-u5a.net"
+# path = ["Skane-lan", "Malmo", "Skanes-Parkettslip"]
+# categories = ["H6dsAI7l"]
+# comment = "Imported 20210501 13:05 CET"
 
-data = create_nested_structure(site_id, path, categories, comment)
+site_id = "akua9394.com"
+path = []  # Empty path
+categories = ["Wu133hyG"]
+comment = "imported 20230630 21:15 CET"
+
+key = "site"
+data = create_nested_structure(key, site_id, path, categories, comment)
 print(data)

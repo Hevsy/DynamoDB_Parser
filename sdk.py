@@ -3,7 +3,7 @@ from urllib import response
 from xml.etree.ElementTree import Comment
 import boto3
 from botocore.exceptions import ClientError
-from func import timestamp, list_to_nested_dict
+from func import timestamp, create_nested_structure
 
 table_name = "DynamoDB_parser-dev"
 
@@ -14,22 +14,13 @@ table = dynamodb.Table(table_name)
 try:
     siteID = "google.coz"
     path = ["foo", "bar", "baz"]
-    path_dict = list_to_nested_dict('site',path)
-    
     site_category = ["H6dsAI7l"]
     comment = "Imported " + timestamp()
+    record = create_nested_structure("site", siteID, path, site_category, comment)
 
-
-    response = table.put_item(
-        Item={
-            "siteId": siteID,
-            "site": path_dict,
-            "categories": site_category,
-            "comment": comment,
-        }
-    )
+    response = table.put_item(Item=record)
     print(response, "______________", sep="\n")
-    print(comment, path_dict, sep="\n")
+    print(comment, record, sep="\n")
 
 except ClientError as err:
     print(err)
