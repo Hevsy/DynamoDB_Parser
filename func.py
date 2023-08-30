@@ -99,3 +99,21 @@ def timestamp() -> str:
     fmt = "%Y%m%d %H:%M %Z"
     return time_now(fmt)
 
+def list_to_nested_dict(key, lst):
+    """
+    Convert a list into a nested dictionary with the specified key.
+
+    This function takes a list and recursively constructs a nested dictionary using the given key. Each element in the list
+    becomes a key in the nested dictionary, and the corresponding value is either the next element in the list (if available)
+    or the last item in the list.
+
+    Parameters:
+        key (str): The key to use for constructing the nested dictionary.
+        lst (list): The list of elements to convert into a nested dictionary.
+
+    Returns:
+        dict: A nested dictionary constructed from the list using the specified key.
+    """
+    if len(lst) == 1:
+        return {key: lst[0]}
+    return {key: {lst[0]: list_to_nested_dict(key, lst[1:])}}

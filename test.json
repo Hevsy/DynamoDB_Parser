@@ -1,19 +1,21 @@
 {
-  "siteId": { "S": "xn--golvlggare-u5a.net" },
-  "site": {
-    "M": {
-      "Skane-lan": {
-        "M": {
-          "site": {
-            "M": {
-              "Malmo": {
-                "M": {
-                  "site": {
-                    "M": {
-                      "Skanes-Parkettslip": {
-                        "M": {
-                          "comment": { "S": "Imported 20210501 13:05 CET" },
-                          "categories": { "L": [{ "S": "H6dsAI7l" }] }
+  "part1": {
+    "siteId": { "S": "xn--golvlggare-u5a.net" },
+    "site": {
+      "M": {
+        "Skane-lan": {
+          "M": {
+            "site": {
+              "M": {
+                "Malmo": {
+                  "M": {
+                    "site": {
+                      "M": {
+                        "Skanes-Parkettslip": {
+                          "M": {
+                            "comment": { "S": "Imported 20210501 13:05 CET" },
+                            "categories": { "L": [{ "S": "H6dsAI7l" }] }
+                          }
                         }
                       }
                     }
@@ -25,5 +27,11 @@
         }
       }
     }
-  }
+  },
+  "part2": {
+    "comment": { "S": "imported 20230630 21:15 CET" },
+    "siteId": { "S": "akua9394.com" },
+    "categories": { "L": [{ "S": "Wu133hyG" }] }
+  },
+  "part3": {'siteId': {'S': 'xn--golvlggare-u5a.net'}, 'site': {'M': {'Skane-lan': {'M': {'site': {'M': {'Malmo': {'M': {'site': {'M': {'Skanes-Parkettslip': {'M': {'comment': {'S': 'Imported 20210501 13:05 CET'}, 'categories': {'L': [{'S': 'H6dsAI7l'}]}}}}}}}}}}}}}}
 }
