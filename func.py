@@ -109,20 +109,17 @@ def timestamp() -> str:
 
 def create_nested_structure(key, site_id, path, categories, comment):
     """
-    Create a nested dictionary structure representing a record in DynamoDB.
-
-    This function generates a nested dictionary structure that represents a record to be stored in DynamoDB.
-    The provided data, such as site_id, path, categories, and comment, are organized according to the specified key.
+    Create a nested dictionary structure representing a DynamoDB record.
 
     Args:
-        key (str): The key to be used for nesting the dictionary.
-        site_id (str): The site identifier.
-        path (list): The list of path components.
-        categories (dict or list): The categories associated with the record.
-        comment (str): The comment associated with the record.
+        key (str): The key used for nesting levels.
+        site_id (str): The site ID.
+        path (list): List of path elements for nesting.
+        categories (list): List of dictionaries representing categories.
+        comment (str): The comment for the record.
 
     Returns:
-        dict: A nested dictionary representing the DynamoDB record.
+        dict: The nested dictionary structure.
     """
     nested_structure = {"siteId": site_id}
 
