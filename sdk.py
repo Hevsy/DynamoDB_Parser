@@ -1,6 +1,9 @@
+from time import time
 from urllib import response
+from xml.etree.ElementTree import Comment
 import boto3
 from botocore.exceptions import ClientError
+from func import timestamp
 
 table_name = "DynamoDB_parser-dev"
 
@@ -9,13 +12,35 @@ table = dynamodb.Table(table_name)
 
 print(list(dynamodb.tables.all()))
 try:
-    # client.put_item(Item={"id": "34", "company": "microsoft"})
     siteID = "google.co"
-    response = table.get_item(Key={"siteId": siteID})
-    print(response, "______________", response["Item"], end="\n")
+    path = ["foo", "bar", "baz"]
+    for v in path:
+        path_dict = {"Site": v for v in path}
+    site_category = ["H6dsAI7l"]
+    comment = "Imported " + timestamp()
+    response = table.put_item(
+        Item={
+            "siteId": siteID,
+            "site": path,
+            "categories": site_category,
+            "comment": comment,
+        }
+    )
+    print(response, "______________", sep="\n")
+    print(comment, path_dict, sep="\n")
 
 except ClientError as err:
     print(err)
+
+# print(list(dynamodb.tables.all()))
+# try:
+#     # client.put_item(Item={"id": "34", "company": "microsoft"})
+#     siteID = "google.co"
+#     response = table.get_item(Key={"siteId": siteID})
+#     print(response, "______________", response["Item"], sep="\n")
+
+# except ClientError as err:
+#     print(err)
 
 # try:
 #     # client.put_item(Item={"id": "34", "company": "microsoft"})
