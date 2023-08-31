@@ -50,66 +50,77 @@ class StringUtils:
         return site_id, path
 
 
-def parse_line(line, delimiter=" "):
-    """
-    Parses a line of text containing a URL and site category.
+class RecordUtils:
+    def __init__(self) -> None:
+        pass
 
-    Args:
-        line (str): The input line to parse.
-        delimiter (str, optional): The delimiter used to split the line into parts. Defaults to space (' ').
+    @staticmethod
+    def parse_line(line, delimiter=" "):
+        """
+        Parses a line of text containing a URL and site category.
 
-    Returns:
-        tuple: A tuple containing site category, site ID, and path components.
-    """
-    parts = line.strip().split(delimiter)
+        Args:
+            line (str): The input line to parse.
+            delimiter (str, optional): The delimiter used to split the line into parts. Defaults to space (' ').
 
-    # Two parts required for parsing: URL and site category.
-    # If there are more or less parts in the line, it is considered malformed
-    # and the function returns 'None' for all outputs, indicating it can be flagged as invalid.
-    if len(parts) != 2:
-        return None, None, None
-    url = parts[0]
-    site_category = parts[1]
-    site_id, path = split_url(url)
-    return site_category, site_id, path
+        Returns:
+            tuple: A tuple containing site category, site ID, and path components.
+        """
+        utils = StringUtils()
+        parts = line.strip().split(delimiter)
 
+        # Two parts required for parsing: URL and site category.
+        # If there are more or less parts in the line, it is considered malformed
+        # and the function returns 'None' for all outputs, indicating it can be flagged as invalid.
+        if len(parts) != 2:
+            return None, None, None
+        url = parts[0]
+        site_category = parts[1]
+        site_id, path = utils.split_url(url)
+        return site_category, site_id, path
 
-def invalid_output(site_category, site_id) -> bool:
-    """
-    Checks if both required parts exist: site ID and site category.
+    @staticmethod
+    def invalid_output(site_category, site_id) -> bool:
+        """
+        Checks if both required parts exist: site ID and site category.
 
-    Args:
-        site_category (str): The site category.
-        site_id (str): The site ID.
+        Args:
+            site_category (str): The site category.
+            site_id (str): The site ID.
 
-    Returns:
-        bool: True if either site ID or site category is missing, indicating an invalid output.
-    """
-    return not site_id or not site_category
-
-
-def time_now(fmt) -> str:
-    """
-    Returns the current time in a specified format.
-
-    Args:
-        fmt (str): The desired time format.
-
-    Returns:
-        str: The current time formatted according to the provided format.
-    """
-    return datetime.now(tz=get_localzone()).strftime(fmt)
+        Returns:
+            bool: True if either site ID or site category is missing, indicating an invalid output.
+        """
+        return not site_id or not site_category
 
 
-def timestamp() -> str:
-    """
-    Returns the current time in 'YYYYMMDD HH:MM TMZ' format.
+class TimeUtils:
+    def __init__(self) -> None:
+        pass
 
-    Returns:
-        str: The current time formatted as 'YYYYMMDD HH:MM TMZ'.
-    """
-    fmt = "%Y%m%d %H:%M %Z"
-    return time_now(fmt)
+    @staticmethod
+    def time_now(fmt) -> str:
+        """
+        Returns the current time in a specified format.
+
+        Args:
+            fmt (str): The desired time format.
+
+        Returns:
+            str: The current time formatted according to the provided format.
+        """
+        return datetime.now(tz=get_localzone()).strftime(fmt)
+
+    @staticmethod
+    def timestamp() -> str:
+        """
+        Returns the current time in 'YYYYMMDD HH:MM TMZ' format.
+
+        Returns:
+            str: The current time formatted as 'YYYYMMDD HH:MM TMZ'.
+        """
+        fmt = "%Y%m%d %H:%M %Z"
+        return self.time_now(fmt)
 
 
 def create_nested_structure(key, site_id, path, categories, comment):
