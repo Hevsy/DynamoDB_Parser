@@ -35,7 +35,7 @@ class StringUtils:
         return s.rstrip("/")
 
     @staticmethod
-    def split_url(url):
+    def split_url(self, url):
         """
         Splits a URL into site ID and path components after stripping protocol and 'www'.
 
@@ -45,7 +45,7 @@ class StringUtils:
         Returns:
             tuple: A tuple containing site ID and path components of the URL.
         """
-        url = url_strip(slash_strip(url))
+        url = self.url_strip(self.slash_strip(url))
         site_id, *path = url.split("/")
         return site_id, path
 
