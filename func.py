@@ -115,7 +115,7 @@ def create_nested_structure(key, site_id, path, categories, comment):
         key (str): The key used for nesting levels.
         site_id (str): The site ID.
         path (list): List of path elements for nesting.
-        categories (list): List of dictionaries representing categories.
+        categories (list): List of strings representing categories.
         comment (str): The comment for the record.
 
     Returns:
