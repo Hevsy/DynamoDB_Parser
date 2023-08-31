@@ -19,7 +19,7 @@ try:
     record = create_nested_structure("site", siteID, path, site_category, comment)
 
     response = table.put_item(Item=record)
-    print(response, "______________", sep="\n")
+    print(response, "_" * 88, sep="\n")
     print(comment, record, sep="\n")
 
 except ClientError as err:

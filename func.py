@@ -3,46 +3,51 @@ from tzlocal import get_localzone
 import re
 
 
-def url_strip(s):
-    """
-    Returns a string with the URL protocol ('http' or 'https') and 'www' prefix stripped.
+class StringUtils:
+    def __init__(self) -> None:
+        pass
 
-    Args:
-        s (str): The input URL string.
+    @staticmethod
+    def url_strip(s):
+        """
+        Returns a string with the URL protocol ('http' or 'https') and 'www' prefix stripped.
 
-    Returns:
-        str: The input URL with protocol and 'www' prefix removed.
-    """
-    pat = r"^(http(s)?:\/\/)?(www\.)?"
-    return re.sub(pat, "", s)
+        Args:
+            s (str): The input URL string.
 
+        Returns:
+            str: The input URL with protocol and 'www' prefix removed.
+        """
+        pat = r"^(http(s)?:\/\/)?(www\.)?"
+        return re.sub(pat, "", s)
 
-def slash_strip(s) -> str:
-    """
-    Returns a string with the trailing '/' characters stripped.
+    @staticmethod
+    def slash_strip(s) -> str:
+        """
+        Returns a string with the trailing '/' characters stripped.
 
-    Args:
-        s (str): The input string.
+        Args:
+            s (str): The input string.
 
-    Returns:
-        str: The input string with trailing '/' characters removed.
-    """
-    return s.rstrip("/")
+        Returns:
+            str: The input string with trailing '/' characters removed.
+        """
+        return s.rstrip("/")
 
+    @staticmethod
+    def split_url(url):
+        """
+        Splits a URL into site ID and path components after stripping protocol and 'www'.
 
-def split_url(url):
-    """
-    Splits a URL into site ID and path components after stripping protocol and 'www'.
+        Args:
+            url (str): The input URL string.
 
-    Args:
-        url (str): The input URL string.
-
-    Returns:
-        tuple: A tuple containing site ID and path components of the URL.
-    """
-    url = url_strip(slash_strip(url))
-    site_id, *path = url.split("/")
-    return site_id, path
+        Returns:
+            tuple: A tuple containing site ID and path components of the URL.
+        """
+        url = url_strip(slash_strip(url))
+        site_id, *path = url.split("/")
+        return site_id, path
 
 
 def parse_line(line, delimiter=" "):
