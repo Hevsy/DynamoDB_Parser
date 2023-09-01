@@ -3,9 +3,14 @@ from tzlocal import get_localzone
 import re
 
 
-class StringUtils:
-    def __init__(self) -> None:
+class Record:
+    def __init__(self, line):
+        self.site_category, self.site_id, self.path = self.parse_line(line)
+        self.data = self.create_record()
         pass
+
+    def create_record(self):
+        return
 
     @staticmethod
     def url_strip(s):
@@ -34,7 +39,6 @@ class StringUtils:
         """
         return s.rstrip("/")
 
-    @staticmethod
     def split_url(self, url):
         """
         Splits a URL into site ID and path components after stripping protocol and 'www'.
@@ -49,13 +53,7 @@ class StringUtils:
         site_id, *path = url.split("/")
         return site_id, path
 
-
-class RecordUtils:
-    def __init__(self) -> None:
-        pass
-
-    @staticmethod
-    def parse_line(line, delimiter=" "):
+    def parse_line(self, line, delimiter=" "):
         """
         Parses a line of text containing a URL and site category.
 
@@ -66,7 +64,6 @@ class RecordUtils:
         Returns:
             tuple: A tuple containing site category, site ID, and path components.
         """
-        utils = StringUtils()
         parts = line.strip().split(delimiter)
 
         # Two parts required for parsing: URL and site category.
@@ -76,7 +73,7 @@ class RecordUtils:
             return None, None, None
         url = parts[0]
         site_category = parts[1]
-        site_id, path = utils.split_url(url)
+        site_id, path = self.split_url(url)
         return site_category, site_id, path
 
     @staticmethod
@@ -111,8 +108,7 @@ class TimeUtils:
         """
         return datetime.now(tz=get_localzone()).strftime(fmt)
 
-    @staticmethod
-    def timestamp() -> str:
+    def timestamp(self) -> str:
         """
         Returns the current time in 'YYYYMMDD HH:MM TMZ' format.
 
