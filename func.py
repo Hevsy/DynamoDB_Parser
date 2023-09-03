@@ -4,23 +4,44 @@ import re
 
 
 class Record:
-    def __init__(self, site_category, site_id, path, comment, categories):
+    def __init__(self, site_id, path, comment, site_categories, invalid_entry):
 
-        self.site_category = site_category
         self.site_id = site_id
         self.path = path
         self.comment = comment
-        self.categories = categories
+        self.site_categories = site_categories
+        self.is_invalid = invalid_entry
 
-        self.data = self.create_record()
-        pass
+        nested_structure = {"siteId": self.site_id}
+
+        current_level = nested_structure
+
+        for folder in self.path:
+            current_level[key] = {folder: {}}
+            current_level = current_level[key][folder]
+
+        current_level["comment"] = self.comment
+        current_level["categories"] = site_categories
+
+        self.data = nested_structure
 
     @classmethod
     def from_line(cls, line, delimeter=" "):
-        # TODO
+
+        parts = line.strip().split(delimeter)
+
+        # Two parts required for parsing: URL and site category.
+        # If there are more or less parts in the line, it is considered malformed
+        # and the function returns 'None' for all outputs and also returns True for invalid_entry
+        if len(parts) != 2:
+            return None, None, None, None, True
+        url = parts[0]
+        site_categories = [parts[1]]
+        site_id, path = Record._parse_url(url)
+        invalid_entry = False
 
         comment = "Imported " + timestamp()
-        return cls(site_category, site_id, path, comment, categories)
+        return cls(site_id, path, comment, site_categories, invalid_entry)
 
     def create_record(self):
         """
@@ -43,7 +64,7 @@ class Record:
         return nested_structure
 
     @staticmethod
-    def url_strip(s):
+    def _url_strip(s):
         """
         Returns a string with the URL protocol ('http' or 'https') and 'www' prefix stripped.
 
@@ -57,7 +78,7 @@ class Record:
         return re.sub(pat, "", s)
 
     @staticmethod
-    def slash_strip(s) -> str:
+    def _slash_strip(s) -> str:
         """
         Returns a string with the trailing '/' characters stripped.
 
@@ -69,7 +90,8 @@ class Record:
         """
         return s.rstrip("/")
 
-    def split_url(self, url):
+    @staticmethod
+    def _parse_url(url):
         """
         Splits a URL into site ID and path components after stripping protocol and 'www'.
 
@@ -79,46 +101,46 @@ class Record:
         Returns:
             tuple: A tuple containing site ID and path components of the URL.
         """
-        url = self.url_strip(self.slash_strip(url))
+        url = Record._url_strip(Record._slash_strip(url))
         site_id, *path = url.split("/")
         return site_id, path
 
-    def parse_line(self, line, delimiter=" "):
-        """
-        Parses a line of text containing a URL and site category.
+    # def parse_line(self, line, delimiter=" "):
+    #     """
+    #     Parses a line of text containing a URL and site category.
 
-        Args:
-            line (str): The input line to parse.
-            delimiter (str, optional): The delimiter used to split the line into parts. Defaults to space (' ').
+    #     Args:
+    #         line (str): The input line to parse.
+    #         delimiter (str, optional): The delimiter used to split the line into parts. Defaults to space (' ').
 
-        Returns:
-            tuple: A tuple containing site category, site ID, and path components.
-        """
-        parts = line.strip().split(delimiter)
+    #     Returns:
+    #         tuple: A tuple containing site category, site ID, and path components.
+    #     """
+    #     parts = line.strip().split(delimiter)
 
-        # Two parts required for parsing: URL and site category.
-        # If there are more or less parts in the line, it is considered malformed
-        # and the function returns 'None' for all outputs, indicating it can be flagged as invalid.
-        if len(parts) != 2:
-            return None, None, None
-        url = parts[0]
-        site_category = parts[1]
-        site_id, path = self.split_url(url)
-        return site_category, site_id, path
+    #     # Two parts required for parsing: URL and site category.
+    #     # If there are more or less parts in the line, it is considered malformed
+    #     # and the function returns 'None' for all outputs, indicating it can be flagged as invalid.
+    #     if len(parts) != 2:
+    #         return None, None, None
+    #     url = parts[0]
+    #     site_category = parts[1]
+    #     site_id, path = self._parse_url(url)
+    #     return site_category, site_id, path
 
-    @staticmethod
-    def invalid_output(site_category, site_id) -> bool:
-        """
-        Checks if both required parts exist: site ID and site category.
+    # @staticmethod
+    # def invalid_output(site_category, site_id) -> bool:
+    #     """
+    #     Checks if both required parts exist: site ID and site category.
 
-        Args:
-            site_category (str): The site category.
-            site_id (str): The site ID.
+    #     Args:
+    #         site_category (str): The site category.
+    #         site_id (str): The site ID.
 
-        Returns:
-            bool: True if either site ID or site category is missing, indicating an invalid output.
-        """
-        return not site_id or not site_category
+    #     Returns:
+    #         bool: True if either site ID or site category is missing, indicating an invalid output.
+    #     """
+    #     return not site_id or not site_category
 
 
 def time_now(fmt) -> str:
