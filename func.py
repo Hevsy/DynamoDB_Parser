@@ -4,7 +4,7 @@ import re
 
 
 class Record:
-    def __init__(self, site_id, path, comment, site_categories, invalid_entry):
+    def __init__(self, site_id, path, comment, site_categories, invalid_entry, key):
 
         self.site_id = site_id
         self.path = path
@@ -26,7 +26,7 @@ class Record:
         self.data = nested_structure
 
     @classmethod
-    def from_line(cls, line, delimeter=" "):
+    def from_line(cls, line, delimeter=" ", key="site"):
 
         parts = line.strip().split(delimeter)
 
@@ -41,7 +41,7 @@ class Record:
         invalid_entry = False
 
         comment = "Imported " + timestamp()
-        return cls(site_id, path, comment, site_categories, invalid_entry)
+        return cls(site_id, path, comment, site_categories, invalid_entry, key)
 
     def create_record(self):
         """
