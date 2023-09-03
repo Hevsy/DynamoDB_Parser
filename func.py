@@ -4,11 +4,23 @@ import re
 
 
 class Record:
-    def __init__(self, line):
-        self.site_category, self.site_id, self.path = self.from_line(line)
-        self.comment = "Imported " + timestamp()
+    def __init__(self, site_category, site_id, path, comment, categories):
+
+        self.site_category = site_category
+        self.site_id = site_id
+        self.path = path
+        self.comment = comment
+        self.categories = categories
+
         self.data = self.create_record()
         pass
+
+    @classmethod
+    def from_line(cls, line, delimeter=" "):
+        # TODO
+
+        comment = "Imported " + timestamp()
+        return cls(site_category, site_id, path, comment, categories)
 
     def create_record(self):
         """
