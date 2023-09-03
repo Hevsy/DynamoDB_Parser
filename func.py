@@ -83,7 +83,7 @@ class Record:
         site_id, *path = url.split("/")
         return site_id, path
 
-    def from_line(self, line, delimiter=" "):
+    def parse_line(self, line, delimiter=" "):
         """
         Parses a line of text containing a URL and site category.
 
