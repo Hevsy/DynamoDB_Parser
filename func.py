@@ -5,9 +5,9 @@ import re
 
 class Record:
     def __init__(self, line):
-        self.site_category, self.site_id, self.path = self.parse_line(line)
-        self.data = self.create_record()
+        self.site_category, self.site_id, self.path = self.from_line(line)
         self.comment = "Imported " + timestamp()
+        self.data = self.create_record()
         pass
 
     def create_record(self):
@@ -71,7 +71,7 @@ class Record:
         site_id, *path = url.split("/")
         return site_id, path
 
-    def parse_line(self, line, delimiter=" "):
+    def from_line(self, line, delimiter=" "):
         """
         Parses a line of text containing a URL and site category.
 
@@ -122,7 +122,7 @@ def time_now(fmt) -> str:
     return datetime.now(tz=get_localzone()).strftime(fmt)
 
 
-def timestamp(self) -> str:
+def timestamp() -> str:
     """
     Returns the current time in 'YYYYMMDD HH:MM TMZ' format.
 
@@ -130,7 +130,7 @@ def timestamp(self) -> str:
         str: The current time formatted as 'YYYYMMDD HH:MM TMZ'.
     """
     fmt = "%Y%m%d %H:%M %Z"
-    return self.time_now(fmt)
+    return time_now(fmt)
 
 
 def create_nested_structure(key, site_id, path, categories, comment):
