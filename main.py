@@ -1,23 +1,22 @@
-import logging,boto3
+import logging, boto3
 from time import sleep
-from botocore.exceptions import ClientError
+from botocore.exceptions import ClientError, ReadTimeoutError, ConnectTimeoutError
 from logging_config import setup_logging
 from record import Record
 
-from config import DYNAMODB_TABLE_NAME, TIMEOUT, WAIT_TIME
+from config import DYNAMODB_TABLE_NAME, WAIT_TIME, CONNECT_TIMEOUT, READ_TIMEOUT
+from db_utils import DynamoDBHandler
 
 
 def main():
-    setup_logging() # Set up logging configuration
+    setup_logging()  # Set up logging configuration
 
-    table_name = DYNAMODB_TABLE_NAME
-
-    dynamodb = boto3.resource("dynamodb")
-    table = dynamodb.Table(table_name)
+    table = DynamoDBHandler(
+        DYNAMODB_TABLE_NAME, CONNECT_TIMEOUT / 1000, READ_TIMEOUT / 1000
+    )  # Set up DynamoDB connection
 
     with open("list1.txt", "r") as file:
         for line in file:
-
             if not line:
                 continue  # Skip empty lines
 
@@ -29,15 +28,28 @@ def main():
                 continue
             else:
                 try:
-                    response = table.put_item(Item=record.data)
+                    response = table.put_item(
+                        Item=record.data, ReturnConsumedCapacity="TOTAL"
+                    )
                     logging.info(f"Succesfully parsed line: {record.data}")
                 except ClientError as err:
                     logging.error(f"Error writing line {line} to the database: {err}")
+                    print (f"Client error: {err}")
+                    continue
+
+                except ReadTimeoutError as err:
+                    logging.error(f"Error writing line {line} to the database: {err}")
+                    print (f"Timeout error: {err}")
+                    continue
+
+                except ConnectTimeoutError as err:
+                    logging.error(f"Error writing line {line} to the database: {err}")
+                    print (f"Timeout error: {err}")
+                    continue
 
             print(record, sep="\n")  # for debugging
             print("_" * 88)
-            sleep(TIMEOUT/1000)
-
+            sleep(WAIT_TIME / 1000)
 
 
 if __name__ == "__main__":

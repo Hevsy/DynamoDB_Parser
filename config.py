@@ -1,3 +1,4 @@
 DYNAMODB_TABLE_NAME = "DynamoDB_parser-dev"
-TIMEOUT = 100
-WAIT_TIME = 3000
+CONNECT_TIMEOUT = 3000
+READ_TIMEOUT = 3000
+WAIT_TIME = 100 # Wait time between lines
