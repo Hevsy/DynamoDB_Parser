@@ -1,30 +1,52 @@
-def create_nested_structure(key, site_id, path, categories, comment):
-    nested_structure = {"siteId": site_id}
+import logging
 
-    current_level = nested_structure
+import boto3
+from botocore.exceptions import ClientError
 
-    for folder in path:
-        current_level[key] = {folder: {}}
-        current_level = current_level[key][folder]
-
-    current_level["comment"] = comment
-    current_level["categories"] = categories
-
-    return nested_structure
+from func import Record, timestamp
+from logging_config import setup_logging
 
 
-# Example usage
+def main():
+    setup_logging()
 
-# site_id = "xn--golvlggare-u5a.net"
-# path = ["Skane-lan", "Malmo", "Skanes-Parkettslip"]
-# categories = ["H6dsAI7l"]
-# comment = "Imported 20210501 13:05 CET"
+    # table_name = "DynamoDB_parser-dev"
 
-site_id = "akua9394.com"
-path = []  # Empty path
-categories = ["Wu133hyG"]
-comment = "imported 20230630 21:15 CET"
+    # dynamodb = boto3.resource("dynamodb")
+    # table = dynamodb.Table(table_name)
 
-key = "site"
-data = create_nested_structure(key, site_id, path, categories, comment)
-print(data)
+    with open("list1.txt", "r") as file:
+        for line in file:
+            if not line:
+                continue  # Skip empty lines
+
+            record = Record.from_line(line)
+
+            # if record.is_invalid
+            #     logging.error(f"Error in line: {line}")
+            #     print("Error - skipping")  # for debugging
+            #     continue
+            # else:
+            #     comment = "Imported " + timestamp()
+            #     record = create_nested_structure(
+            #         "site", site_id, path, site_category, comment
+            #     )
+
+            #     try:
+            #         response = table.put_item(Item=record)
+            #         logging.info(f"Succesfully parsed line: {record}")
+            #     except ClientError as err:
+            #         logging.error(f"Error writing line {line} to the database: {err}")
+
+            # print(site_id, path, site_category, sep="\n")  # for debugging
+            if record:
+                print(type(record))
+                print(record.data)
+                print("_" * 88)
+            else:
+                print("Invalid line - skipping")
+                print("_" * 88)
+
+
+if __name__ == "__main__":
+    main()

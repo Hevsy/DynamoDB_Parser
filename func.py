@@ -10,20 +10,21 @@ class Record:
         self.path = path
         self.comment = comment
         self.site_categories = site_categories
+        self.key = key
         self.is_invalid = invalid_entry
 
-        nested_structure = {"siteId": self.site_id}
+        # nested_structure = {"siteId": self.site_id}
 
-        current_level = nested_structure
+        # current_level = nested_structure
 
-        for folder in self.path:
-            current_level[key] = {folder: {}}
-            current_level = current_level[key][folder]
+        # for folder in self.path:
+        #     current_level[key] = {folder: {}}
+        #     current_level = current_level[key][folder]
 
-        current_level["comment"] = self.comment
-        current_level["categories"] = site_categories
+        # current_level["comment"] = self.comment
+        # current_level["categories"] = site_categories
 
-        self.data = nested_structure
+        self.data = self.create_record()
 
     @classmethod
     def from_line(cls, line, delimeter=" ", key="site"):
@@ -34,7 +35,7 @@ class Record:
         # If there are more or less parts in the line, it is considered malformed
         # and the function returns 'None' for all outputs and also returns True for invalid_entry
         if len(parts) != 2:
-            return None, None, None, None, True
+            return None  # Create an invalid Record
         url = parts[0]
         site_categories = [parts[1]]
         site_id, path = Record._parse_url(url)
@@ -55,11 +56,11 @@ class Record:
         current_level = nested_structure
 
         for folder in self.path:
-            current_level[key] = {folder: {}}
-            current_level = current_level[key][folder]
+            current_level[self.key] = {folder: {}}
+            current_level = current_level[self.key][folder]
 
         current_level["comment"] = self.comment
-        current_level["categories"] = categories
+        current_level["categories"] = self.site_categories
 
         return nested_structure
 
@@ -104,6 +105,15 @@ class Record:
         url = Record._url_strip(Record._slash_strip(url))
         site_id, *path = url.split("/")
         return site_id, path
+
+    def __str__(self):
+        # Override __str__ for debugging or logging
+
+        return (
+            f"Invalid record"
+            if self.is_invalid
+            else f"site_category: {self.site_categories}, site_id: {self.site_id}, path: {self.path}"
+        )
 
     # def parse_line(self, line, delimiter=" "):
     #     """
