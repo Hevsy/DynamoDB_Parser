@@ -2,7 +2,7 @@ from botocore.config import Config
 import boto3
 
 
-def DynamoDBHandler(table_name, connect_timeout="5", read_timeout="10"):
+def DynamoDBHandler(table_name, connect_timeout=5, read_timeout=10):
     """
     Initialize and configure an AWS DynamoDB resource handler for interacting with a specific table.
 

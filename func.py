@@ -82,7 +82,7 @@ def slash_strip(s) -> str:
     return s.rstrip("/")
 
 
-def parse_url(url) -> str:
+def parse_url(url):
     """
     Splits a URL into site ID and path components after stripping protocol and 'www'.
 

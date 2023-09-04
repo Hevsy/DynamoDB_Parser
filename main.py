@@ -12,7 +12,7 @@ def main():
     setup_logging()  # Set up logging configuration
 
     table = DynamoDBHandler(
-        DYNAMODB_TABLE_NAME, CONNECT_TIMEOUT / 1000, READ_TIMEOUT / 1000
+        DYNAMODB_TABLE_NAME, int(CONNECT_TIMEOUT / 1000), int(READ_TIMEOUT / 1000)
     )  # Set up DynamoDB connection
 
     with open("list1.txt", "r") as file:
