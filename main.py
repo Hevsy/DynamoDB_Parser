@@ -34,17 +34,17 @@ def main():
                     logging.info(f"Succesfully parsed line: {record.data}")
                 except ClientError as err:
                     logging.error(f"Error writing line {line} to the database: {err}")
-                    print (f"Client error: {err}")
+                    print(f"Client error: {err}")
                     continue
 
                 except ReadTimeoutError as err:
                     logging.error(f"Error writing line {line} to the database: {err}")
-                    print (f"Timeout error: {err}")
+                    print(f"Timeout error: {err}")
                     continue
 
                 except ConnectTimeoutError as err:
                     logging.error(f"Error writing line {line} to the database: {err}")
-                    print (f"Timeout error: {err}")
+                    print(f"Timeout error: {err}")
                     continue
 
             print(record, sep="\n")  # for debugging
