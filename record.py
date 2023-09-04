@@ -1,11 +1,10 @@
 import re
 
-from func import timestamp
+from func import parse_url, timestamp
 
 
 class Record:
     def __init__(self, site_id, path, comment, site_categories, key):
-
         self.site_id = site_id
         self.path = path
         self.comment = comment
@@ -16,9 +15,8 @@ class Record:
         self.data = self._create_record()
 
     @classmethod
-    def from_line(cls, line, delimeter=" ", key="site"):
-
-        parts = line.strip().split(delimeter)
+    def from_line(cls, line, delimiter=" ", key="site"):
+        parts = line.strip().split(delimiter)
 
         # Two parts required for parsing: URL and site category.
         # If there are more or less parts in the line, it is considered malformed
@@ -27,7 +25,7 @@ class Record:
             return None  # Create an invalid Record
         url = parts[0]
         site_categories = [parts[1]]
-        site_id, path = Record._parse_url(url)
+        site_id, path = parse_url(url)
 
         comment = "Imported " + timestamp()
         return cls(site_id, path, comment, site_categories, key)
@@ -54,48 +52,6 @@ class Record:
             current_level["categories"] = self.site_categories
 
         return nested_structure
-
-    @staticmethod
-    def _url_strip(s):
-        """
-        Returns a string with the URL protocol ('http' or 'https') and 'www' prefix stripped.
-
-        Args:
-            s (str): The input URL string.
-
-        Returns:
-            str: The input URL with protocol and 'www' prefix removed.
-        """
-        pat = r"^(http(s)?:\/\/)?(www\.)?"
-        return re.sub(pat, "", s)
-
-    @staticmethod
-    def _slash_strip(s) -> str:
-        """
-        Returns a string with the trailing '/' characters stripped.
-
-        Args:
-            s (str): The input string.
-
-        Returns:
-            str: The input string with trailing '/' characters removed.
-        """
-        return s.rstrip("/")
-
-    @staticmethod
-    def _parse_url(url):
-        """
-        Splits a URL into site ID and path components after stripping protocol and 'www'.
-
-        Args:
-            url (str): The input URL string.
-
-        Returns:
-            tuple: A tuple containing site ID and path components of the URL.
-        """
-        url = Record._url_strip(Record._slash_strip(url))
-        site_id, *path = url.split("/")
-        return site_id, path
 
     def __str__(self):
         # Override __str__ for debugging or logging

@@ -2,7 +2,7 @@ from botocore.config import Config
 import boto3
 
 
-def DynamoDBHandler(table_name, connect_timeout, read_timeout):
+def DynamoDBHandler(table_name, connect_timeout="5", read_timeout="10"):
     """
     Initialize and configure an AWS DynamoDB resource handler for interacting with a specific table.
 
@@ -19,10 +19,12 @@ def DynamoDBHandler(table_name, connect_timeout, read_timeout):
         >>> item = dynamodb_table.get_item(Key={"Key": "Value"})
     """
     config = Config(
-        connect_timeout=connect_timeout, read_timeout=read_timeout, retries={"max_attempts": 5}
+        connect_timeout=connect_timeout,
+        read_timeout=read_timeout,
+        retries={"max_attempts": 5},
     )
 
     dynamodb = boto3.resource("dynamodb", config=config)
     table = dynamodb.Table(table_name)
-    # dynamodb = resource("dynamodb", endpoint_url="http://localhost:8000", config=config)
+
     return table
