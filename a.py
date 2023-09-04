@@ -1,9 +1,6 @@
-import logging
 
-import boto3
-from botocore.exceptions import ClientError
 
-from func import Record, timestamp
+from record import Record
 from logging_config import setup_logging
 
 

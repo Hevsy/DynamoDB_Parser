@@ -1,5 +1,7 @@
 import re
 
+from func import timestamp
+
 
 class Record:
     def __init__(self, site_id, path, comment, site_categories, key):
@@ -9,6 +11,7 @@ class Record:
         self.comment = comment
         self.site_categories = site_categories
         self.key = key
+        self.is_invalid = True if not site_id or not site_categories else False
 
         self.data = self._create_record()
 
@@ -36,16 +39,19 @@ class Record:
         Returns:
             dict: The nested dictionary structure.
         """
-        nested_structure = {"siteId": self.site_id}
+        if self.is_invalid:
+            return None
+        else:
+            nested_structure = {"siteId": self.site_id}
 
-        current_level = nested_structure
+            current_level = nested_structure
 
-        for folder in self.path:
-            current_level[self.key] = {folder: {}}
-            current_level = current_level[self.key][folder]
+            for folder in self.path:
+                current_level[self.key] = {folder: {}}
+                current_level = current_level[self.key][folder]
 
-        current_level["comment"] = self.comment
-        current_level["categories"] = self.site_categories
+            current_level["comment"] = self.comment
+            current_level["categories"] = self.site_categories
 
         return nested_structure
 
